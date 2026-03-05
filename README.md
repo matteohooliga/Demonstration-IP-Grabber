@@ -10,17 +10,15 @@ Ce projet est un outil éducatif en Python (Flask). Il permet d'illustrer commen
 
 1. **Python 3.x** : [Télécharger Python](https://www.python.org/downloads/) (Cochez _"Add Python to PATH"_ lors de l'installation).
 2. **Modules Python** : Ouvrez un terminal (`cmd`) dans le dossier du projet et tapez :
+
    ```cmd
    pip install flask requests
    ```
 
-````
-
 3. **Configuration du script** : Ouvrez `app.py` et modifiez :
-* `WEBHOOK_URL` : Votre lien de Webhook Discord.
-* `TARGET_URL` : Le site vers lequel rediriger la cible.
 
-
+- `WEBHOOK_URL` : Votre lien de Webhook Discord.
+- `TARGET_URL` : Le site vers lequel rediriger la cible.
 
 ---
 
@@ -43,10 +41,10 @@ Idéal pour des tests rapides, mais la version gratuite affiche parfois une page
 
 1. Téléchargez et installez [Ngrok](https://ngrok.com/download).
 2. Ouvrez une nouvelle invite de commande (`cmd`) et tapez la commande suivante :
+
 ```cmd
 ngrok http 5000 --request-header-add ngrok-skip-browser-warning:true
-
-````
+```
 
 3. Dans la console Ngrok, repérez la ligne `Forwarding` et copiez le lien en `https://...`. C'est votre lien de démonstration.
 
